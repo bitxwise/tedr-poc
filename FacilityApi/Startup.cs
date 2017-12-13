@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using FacilityApi.Commands;
 using FacilityApi.Cqrs;
+using FacilityApi.Events;
+using FacilityApi.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +29,12 @@ namespace FacilityApi
         {
             services.AddSingleton<ICommandBus, FakeBus>();
             services.AddSingleton<FacilityCommandHandlers>();
+            services.AddSingleton<IEventStore, EventStore>();
+            services.AddSingleton<IRepository<Facility>, EventSourcedRepository<Facility>>();
+
+            // TODO: Remove when using an external event publisher, like Kafka
+            services.AddSingleton<IEventPublisher, FakeBus>();
+            
             services.AddMvc();
         }
 
@@ -48,6 +56,14 @@ namespace FacilityApi
             {
                 var facilityCommandHandlers = serviceProvider.GetService<FacilityCommandHandlers>();
                 commandBus.RegisterHandler<CreateFacilityCommand>(facilityCommandHandlers.Handle);
+            }
+
+            var eventPublisher = serviceProvider.GetService<IEventPublisher>() as FakeBus;
+            if(eventPublisher != null)
+            {
+                eventPublisher.RegisterHandler<FacilityCreatedEvent>((e) => {
+                    System.Console.WriteLine($"Created facility({e.FacilityId} - {e.FacilityName})");
+                });
             }
         }
     }

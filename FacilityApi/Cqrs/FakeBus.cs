@@ -6,8 +6,8 @@ using System.Threading;
 namespace FacilityApi.Cqrs
 {
     /// <summary>
-    /// Fake bus used to simulate an external communication bus. Leveraged from
-    /// Greg Young's SimpleCQRS approach.
+    /// Fake bus used to simulate an external communication bus.
+    /// Leveraged from Greg Young's SimpleCQRS approach.
     /// </summary>
     public class FakeBus : ICommandBus, IEventPublisher
     {
@@ -41,7 +41,7 @@ namespace FacilityApi.Cqrs
             }
         }
 
-        public void Publish<T>(T @event) where T : IEvent
+        public void Publish<T>(T @event) where T : Event
         {
             List<Action<IMessage>> handlers;
 
@@ -79,6 +79,6 @@ namespace FacilityApi.Cqrs
     /// </summary>
     public interface IEventPublisher
     {
-        void Publish<T>(T @event) where T : IEvent;
+        void Publish<T>(T @event) where T : Event;
     }
 }

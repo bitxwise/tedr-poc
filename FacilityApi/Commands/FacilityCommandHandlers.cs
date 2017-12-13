@@ -1,4 +1,5 @@
 using FacilityApi.Cqrs;
+using FacilityApi.Models;
 
 namespace FacilityApi.Commands
 {
@@ -7,14 +8,16 @@ namespace FacilityApi.Commands
     /// </summary>
     public class FacilityCommandHandlers
     {
+        private readonly IRepository<Facility> _repository;
+        
         /// <summary>
         /// Initializes a new instance of the FacilityApi.Commands.FacilityCommandHandlers class
         /// with the specified facility repository.
         /// </summary>
-        /// <param name="repository"></param>
-        public FacilityCommandHandlers()
+        /// <param name="repository">Repository for facilities.</param>
+        public FacilityCommandHandlers(IRepository<Facility> repository)
         {
-            
+            _repository = repository;
         }
 
         /// <summary>
@@ -23,7 +26,8 @@ namespace FacilityApi.Commands
         /// <param name="command">The create facility command to handle.</param>
         public void Handle(CreateFacilityCommand command)
         {
-            
+            var facility = new Facility(command.FacilityId, command.FacilityName);
+            _repository.Save(facility, -1);
         }
     }
 }
