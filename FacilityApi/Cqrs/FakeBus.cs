@@ -9,7 +9,7 @@ namespace FacilityApi.Cqrs
     /// Fake bus used to simulate an external communication bus. Leveraged from
     /// Greg Young's SimpleCQRS approach.
     /// </summary>
-    public class FakeBus
+    public class FakeBus : ICommandBus, IEventPublisher
     {
         private readonly Dictionary<Type, List<Action<IMessage>>> _routes = new Dictionary<Type, List<Action<IMessage>>>();
 
