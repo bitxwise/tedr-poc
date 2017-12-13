@@ -2,9 +2,9 @@
 namespace FacilityApi.Cqrs
 {
     /// <summary>
-    /// Marker for commands used with CQRS.
+    /// Marker for events used with CQRS.
     /// </summary>
-    public interface ICommand : IMessage
+    public interface IEvent : IMessage
     {
     }
 }
