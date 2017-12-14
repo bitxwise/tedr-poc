@@ -1,8 +1,8 @@
+using System;
 using Microsoft.AspNetCore.Mvc;
 using FacilityApi.Commands;
-using FacilityApi.Cqrs;
-using System;
 using FacilityApi.Controllers.Resources;
+using Risly.Cqrs;
 
 namespace FacilityApi.Controllers
 {

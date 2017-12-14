@@ -1,5 +1,5 @@
 using System;
-using FacilityApi.Cqrs;
+using Risly.Cqrs;
 
 namespace FacilityApi.Commands
 {

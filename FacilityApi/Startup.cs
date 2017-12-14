@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FacilityApi.Commands;
-using FacilityApi.Cqrs;
 using FacilityApi.Events;
 using FacilityApi.Models;
 using Microsoft.AspNetCore.Builder;
@@ -13,6 +12,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Risly.Cqrs;
+using Risly.Reflection;
 
 namespace FacilityApi
 {
@@ -74,7 +75,7 @@ namespace FacilityApi
                     Facility f = new Facility();
                     f.AsDynamic().Apply(e_deserialized);
 
-                    System.Console.WriteLine($"Serialized and then deserialized {e.FacilityId}");
+                    System.Console.WriteLine($"Serialized and then deserialized {f.Id}");
                 });
             }
         }

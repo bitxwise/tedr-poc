@@ -1,6 +1,6 @@
 using System;
-using FacilityApi.Cqrs;
 using FacilityApi.Events;
+using Risly.Cqrs;
 
 namespace FacilityApi.Models
 {
