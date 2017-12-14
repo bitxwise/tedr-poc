@@ -1,7 +1,6 @@
-// TODO: Migrate and change namespace
 using System;
 
-namespace FacilityApi.Cqrs
+namespace Risly.Cqrs
 {
     /// <summary>
     /// Represents a repository for domain aggregates.

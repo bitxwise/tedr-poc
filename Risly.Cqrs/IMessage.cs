@@ -1,5 +1,4 @@
-// TODO: Migrate and change namespace
-namespace FacilityApi.Cqrs
+namespace Risly.Cqrs
 {
     /// <summary>
     /// Marker for messages that are sent by a communication bus.

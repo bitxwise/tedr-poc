@@ -1,8 +1,7 @@
-// TODO: Migrate and change namespace
 using System;
 using System.Collections.Generic;
 
-namespace FacilityApi.Cqrs
+namespace Risly.Cqrs
 {
     /// <summary>
     /// Represents an event store.

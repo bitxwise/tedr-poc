@@ -1,9 +1,8 @@
-// TODO: Migrate and change namespace
 using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace FacilityApi.Cqrs
+namespace Risly.Cqrs
 {
     /// <summary>
     /// Fake bus used to simulate an external communication bus.

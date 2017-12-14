@@ -1,5 +1,4 @@
-// TODO: Migrate and change namespace
-namespace FacilityApi.Cqrs
+namespace Risly.Cqrs
 {
     /// <summary>
     /// Marker for commands used with CQRS.

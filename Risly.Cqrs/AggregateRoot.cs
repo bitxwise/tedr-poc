@@ -1,8 +1,8 @@
-// TODO: Migrate and change namespace
 using System;
 using System.Collections.Generic;
+using Risly.Reflection;
 
-namespace FacilityApi.Cqrs
+namespace Risly.Cqrs
 {
     /// <summary>
     /// Represents a domain aggregate root from Design Driven Development.
