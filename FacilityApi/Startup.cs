@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace FacilityApi
 {
@@ -63,6 +64,17 @@ namespace FacilityApi
             {
                 eventPublisher.RegisterHandler<FacilityCreatedEvent>((e) => {
                     System.Console.WriteLine($"Created facility({e.FacilityId} - {e.FacilityName})");
+
+                    JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+
+                    var e_serialized = JsonConvert.SerializeObject(e, settings);
+
+                    Event e_deserialized = JsonConvert.DeserializeObject<Event>(e_serialized, settings);
+
+                    Facility f = new Facility();
+                    f.AsDynamic().Apply(e_deserialized);
+
+                    System.Console.WriteLine($"Serialized and then deserialized {e.FacilityId}");
                 });
             }
         }
