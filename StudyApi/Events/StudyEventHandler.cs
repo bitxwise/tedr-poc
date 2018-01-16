@@ -20,6 +20,7 @@ namespace StudyApi.Events
         {
             _handlers = new Dictionary<Type, Action<Event>>();
             _handlers.Add(typeof(StudyAutoValidatedEvent), (e) => Handle((StudyAutoValidatedEvent)e));
+            _handlers.Add(typeof(BadStudyAccessionEvent), (e) => Handle((BadStudyAccessionEvent)e));
 
             _studyRepository = studyRepository;
         }
@@ -33,6 +34,14 @@ namespace StudyApi.Events
         }
 
         public void Handle(StudyAutoValidatedEvent e)
+        {
+            var study = _studyRepository.GetById(e.StudyId);
+            study.Apply(e);
+
+            _studyRepository.Save(study, study.Version);
+        }
+
+        public void Handle(BadStudyAccessionEvent e)
         {
             var study = _studyRepository.GetById(e.StudyId);
             study.Apply(e);

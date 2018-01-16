@@ -145,6 +145,11 @@ namespace StudyApi.Models
             // TODO: Update study status with ApplyChange(StudyStatusChangedEvent e)
         }
 
+        public void Apply(BadStudyAccessionEvent e)
+        {
+            // TODO: Update study status with ApplyChange(StudyStatusChangedEvent e)
+        }
+
         #endregion Event Applications
 
         /// <summary>
