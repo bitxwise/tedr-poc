@@ -10,7 +10,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Risly.Cqrs;
-using Risly.Reflection;
 using StudyApi.Commands;
 using StudyApi.Events;
 using StudyApi.Models;
@@ -78,17 +77,14 @@ namespace StudyApi
             {
                 eventPublisher.RegisterHandler<StudyCreatedEvent>((e) => {
                     System.Console.WriteLine($"Created study({e.StudyId})");
+                });
 
-                    JsonSerializerSettings settings = new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.All };
+                eventPublisher.RegisterHandler<FacilityChangedEvent>((e) => {
+                    System.Console.WriteLine($"Identifed study({e.StudyId}) sent by facility({e.FacilityId} - {e.FacilityName})");
+                });
 
-                    var e_serialized = JsonConvert.SerializeObject(e, settings);
-
-                    Event e_deserialized = JsonConvert.DeserializeObject<Event>(e_serialized, settings);
-
-                    Study s = new Study();
-                    s.AsDynamic().Apply(e_deserialized);
-
-                    System.Console.WriteLine($"Serialized and then deserialized {s.Id}");
+                eventPublisher.RegisterHandler<AccessionNumberChangedEvent>((e) => {
+                    System.Console.WriteLine($"Accession number for study({e.StudyId}) changed to ({e.AccessionNumber})");
                 });
             }
         }
