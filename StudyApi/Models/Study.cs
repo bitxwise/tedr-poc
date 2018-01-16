@@ -48,6 +48,18 @@ namespace StudyApi.Models
             get { return _reason; }
         }
 
+        private Guid _statusId;
+        public Guid StatusId
+        {
+            get { return _statusId; }
+        }
+
+        private string _statusName;
+        public string StatusName
+        {
+            get { return _statusName; }
+        }
+
         // TODO: Protect constructor from public abuse
         /// <summary>
         /// Initializes a new instance of the StudyApi.Models.Study class.
@@ -86,6 +98,8 @@ namespace StudyApi.Models
         public void Apply(StudyCreatedEvent e)
         {
             _id = e.StudyId;
+            _statusId = StudyStatus.CreatedGuid;
+            _statusName = StudyStatus.CreatedName;
         }
 
         public void Apply(FacilityChangedEvent e)
@@ -112,42 +126,48 @@ namespace StudyApi.Models
 
         public void Apply(ImageSetChangedEvent e)
         {
-            // Intentionally left blank
+            // Intentionally left blank - internal model doesn't care
         }
 
         public void Apply(ImagesReceivedEvent e)
         {
-            // Intentionally left blank
+            // Intentionally left blank - internal model doesn't care
         }
 
         public void Apply(ImageTotalChangedEvent e)
         {
-            // Intentionally left blank
+            // Intentionally left blank - internal model doesn't care
         }
 
         public void Apply(PatientChangedEvent e)
         {
-            // Intentionally left blank
+            // Intentionally left blank - internal model doesn't care
         }
 
         public void Apply(ReferringPhysicianChangedEvent e)
         {
-            // Intentionally left blank
+            // Intentionally left blank - internal model doesn't care
+        }
+
+        public void Apply(StudyStatusChangedEvent e)
+        {
+            _statusId = e.StatusId;
+            _statusName = e.StatusName;
         }
 
         public void Apply(StudyReviewedEvent e)
         {
-            // Intentionally left blank - if not POC, then maybe update study status
+            ApplyChange(new StudyStatusChangedEvent(Id, StudyStatus.ReviewedGuid, StudyStatus.ReviewedName));
         }
 
         public void Apply(StudyAutoValidatedEvent e)
         {
-            // TODO: Update study status with ApplyChange(StudyStatusChangedEvent e)
+            ApplyChange(new StudyStatusChangedEvent(Id, StudyStatus.ReadyGuid, StudyStatus.ReadyName));
         }
 
         public void Apply(BadStudyAccessionEvent e)
         {
-            // TODO: Update study status with ApplyChange(StudyStatusChangedEvent e)
+            ApplyChange(new StudyStatusChangedEvent(Id, StudyStatus.NotReadyGuid, StudyStatus.NotReadyName));
         }
 
         #endregion Event Applications
