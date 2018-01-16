@@ -1,7 +1,7 @@
 using System;
 using Risly.Cqrs;
 
-namespace StudValidationApi.Events
+namespace StudyValidationApi.Events
 {
     /// <summary>
     /// Represents event that is raised when a study is reviewed.
