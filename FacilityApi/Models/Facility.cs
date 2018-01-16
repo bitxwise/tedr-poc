@@ -12,7 +12,7 @@ namespace FacilityApi.Models
             get { return _id; }
         }
 
-        // TODO: Make constructor non-private
+        // TODO: Protect constructor from public abuse
         /// <summary>
         /// Initializes a new instance of the FacilityApi.Models.Facility class.
         /// This constructor is intended to be used by repositories only.

@@ -25,7 +25,7 @@ namespace Risly.Cqrs
         {
             var obj = new T();//lots of ways to do this
             var e = _storage.GetEventsForAggregate(id);
-            obj.LoadsFromHistory(e);
+            obj.LoadFromHistory(e);
             return obj;
         }
     }
