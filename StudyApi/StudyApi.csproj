@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Risly.Cqrs.Kafka\Risly.Cqrs.Kafka.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\StudyApi.Events\StudyApi.Events.csproj" />
+  </ItemGroup>
+
 </Project>

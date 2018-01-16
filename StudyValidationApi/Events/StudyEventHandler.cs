@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Risly.Cqrs;
 using Risly.Cqrs.Kafka;
+using StudyApi.Events;
 using StudyValidationApi.Models;
 using StudyValidationApi.Persistence;
 using StudyValidationApi.ValidationRules;

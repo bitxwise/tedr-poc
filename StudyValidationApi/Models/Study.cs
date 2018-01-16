@@ -1,5 +1,6 @@
 using System;
 using Risly.Cqrs;
+using StudyApi.Events;
 using StudyValidationApi.Events;
 
 namespace StudyValidationApi.Models
