@@ -5,9 +5,9 @@ namespace Risly.Cqrs
     /// <summary>
     /// Represents a repository for domain aggregates.
     /// </summary>
-    public interface IRepository<T>
+    public interface IRepository<T> where T : AggregateRoot
     {
-        void Save(AggregateRoot aggregate, int expectedVersion);
+        void Save(T aggregate, int expectedVersion);
         T GetById(Guid id);
     }
 }

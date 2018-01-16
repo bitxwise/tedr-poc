@@ -16,7 +16,7 @@ namespace Risly.Cqrs
             _storage = storage;
         }
 
-        public void Save(AggregateRoot aggregate, int expectedVersion)
+        public void Save(T aggregate, int expectedVersion)
         {
             _storage.SaveEvents(aggregate.Id, aggregate.GetUncommittedChanges(), expectedVersion);
         }

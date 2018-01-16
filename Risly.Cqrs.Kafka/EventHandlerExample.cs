@@ -16,12 +16,12 @@ namespace Risly.Cqrs.Kafka
             //_Repository = Repository;
         }
 
-        public void Handle(Event Event)
+        public void Handle(Event @event)
         {
-            Type eventType = Event.GetType();
+            Type eventType = @event.GetType();
             
             if(_handlers.ContainsKey(eventType))
-                _handlers[eventType](Event);
+                _handlers[eventType](@event);
         }
     }
 }
