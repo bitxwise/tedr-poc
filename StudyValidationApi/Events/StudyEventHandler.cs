@@ -20,6 +20,9 @@ namespace StudyValidationApi.Events
         public StudyEventHandler(StudyRepository studyRepository)
         {
             _handlers = new Dictionary<Type, Action<Event>>();
+            _handlers.Add(typeof(StudyCreatedEvent), (e) => Handle((StudyCreatedEvent)e));
+            _handlers.Add(typeof(AccessionNumberChangedEvent), (e) => Handle((AccessionNumberChangedEvent)e));
+            _handlers.Add(typeof(StudyReviewedEvent), (e) => Handle((StudyReviewedEvent)e));
 
             // TODO: Separate validation rules into its own object so that they can be managed separately
             _validationRules = new List<IValidationRule>() {

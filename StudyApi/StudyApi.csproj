@@ -20,4 +20,8 @@
     <ProjectReference Include="..\Risly.Cqrs\Risly.Cqrs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Risly.Cqrs.Kafka\Risly.Cqrs.Kafka.csproj" />
+  </ItemGroup>
+
 </Project>

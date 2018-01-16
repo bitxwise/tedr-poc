@@ -140,6 +140,11 @@ namespace StudyApi.Models
             // Intentionally left blank - if not POC, then maybe update study status
         }
 
+        public void Apply(StudyAutoValidatedEvent e)
+        {
+            // TODO: Update study status with ApplyChange(StudyStatusChangedEvent e)
+        }
+
         #endregion Event Applications
 
         /// <summary>

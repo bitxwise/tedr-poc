@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Risly.Cqrs;
+using Risly.Cqrs.Kafka;
 using StudyApi.Commands;
 using StudyApi.Events;
 using StudyApi.Models;
@@ -18,6 +19,8 @@ namespace StudyApi
 {
     public class Startup
     {
+        private KafkaEventConsumer _studyKafkaEventConsumer;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -28,13 +31,18 @@ namespace StudyApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // manages events and data internally
             services.AddSingleton<ICommandBus, FakeBus>();
             services.AddSingleton<StudyCommandHandlers>();
             services.AddSingleton<IEventStore, EventStore>();
             services.AddSingleton<IRepository<Study>, EventSourcedRepository<Study>>();
 
-            // TODO: Remove when using an external event publisher, like Kafka
-            services.AddSingleton<IEventPublisher, FakeBus>();
+            // publishes events to other services
+            services.AddSingleton<IEventPublisher, KafkaEventPublisher>();
+            
+            // handles events published by other services
+            services.AddSingleton<IEventHandler, StudyEventHandler>();
+            services.AddSingleton<KafkaEventConsumer>();
 
             services.AddMvc();
         }
@@ -73,21 +81,19 @@ namespace StudyApi
                 commandBus.RegisterHandler<ReviewStudyCommand>(studyCommandHandlers.Handle);
             }
 
-            var eventPublisher = serviceProvider.GetService<IEventPublisher>() as FakeBus;
-            if(eventPublisher != null)
-            {
-                eventPublisher.RegisterHandler<StudyCreatedEvent>((e) => {
-                    System.Console.WriteLine($"Created study({e.StudyId})");
-                });
+            string topicName = "studies";
+            var eventPublisher = serviceProvider.GetService<IEventPublisher>() as KafkaEventPublisher;
+            eventPublisher.TopicName = topicName;
+            
+            _studyKafkaEventConsumer = serviceProvider.GetService<KafkaEventConsumer>();
+            _studyKafkaEventConsumer.TopicName = topicName;
+            _studyKafkaEventConsumer.Start();
+        }
 
-                eventPublisher.RegisterHandler<FacilityChangedEvent>((e) => {
-                    System.Console.WriteLine($"Identifed study({e.StudyId}) sent by facility({e.FacilityId} - {e.FacilityName})");
-                });
-
-                eventPublisher.RegisterHandler<AccessionNumberChangedEvent>((e) => {
-                    System.Console.WriteLine($"Accession number for study({e.StudyId}) changed to ({e.AccessionNumber})");
-                });
-            }
+        private void OnShutdown()
+        {
+            if(!_studyKafkaEventConsumer.IsStopping)
+                _studyKafkaEventConsumer.Stop();
         }
     }
 }
