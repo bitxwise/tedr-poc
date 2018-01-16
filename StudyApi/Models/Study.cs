@@ -81,6 +81,8 @@ namespace StudyApi.Models
             ApplyChange(new ReferringPhysicianChangedEvent(studyId, referringPhysicianFirstName, referringPhysicianLastName));
         }
 
+        #region Event Applications
+
         public void Apply(StudyCreatedEvent e)
         {
             _id = e.StudyId;
@@ -131,6 +133,23 @@ namespace StudyApi.Models
         public void Apply(ReferringPhysicianChangedEvent e)
         {
             // Intentionally left blank
+        }
+
+        public void Apply(StudyReviewedEvent e)
+        {
+            // Intentionally left blank - if not POC, then maybe update study status
+        }
+
+        #endregion Event Applications
+
+        /// <summary>
+        /// Captures that study has been reviewed. If this were not a POC,
+        /// would specify an actual study review - not to be confused with study report review
+        /// from quality peer review.
+        /// </summary>
+        public void CaptureReview()
+        {
+            ApplyChange(new StudyReviewedEvent(Id));
         }
     }
 }

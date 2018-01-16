@@ -7,7 +7,6 @@ using StudyApi.Controllers.Resources;
 
 namespace StudyApi.Controllers
 {
-    [Route("api/[controller]")]
     public class StudiesController : Controller
     {
         private readonly ICommandBus _commandBus;
@@ -16,20 +15,19 @@ namespace StudyApi.Controllers
             _commandBus = commandBus;
         }
 
-        // GET api/studies
-        [HttpGet]
-        public IEnumerable<StudyResource> Get()
+        [HttpGet, Route("api/studies")]
+        public IEnumerable<StudyResource> GetStudies()
         {
             return new StudyResource[] {
                 StudyResource.Generate()
             };
         }
 
-        // POST api/studies
-        [HttpPost]
-        public IActionResult Post([FromBody]StudyResource studyResource)
+        [HttpPost, Route("api/studies")]
+        public IActionResult CreateStudy([FromBody]StudyResource studyResource)
         {
-            var command = new CreateStudyCommand(Guid.NewGuid(), studyResource.Facility.Id, studyResource.Facility.Name,
+            Guid studyId = Guid.NewGuid();
+            var command = new CreateStudyCommand(studyId, studyResource.Facility.Id, studyResource.Facility.Name,
                 studyResource.AccessionNumber, studyResource.Procedure.Id, studyResource.Procedure.Name,
                 studyResource.ProcedureDate, studyResource.Reason, studyResource.ImageSet.Id, studyResource.ImageSet.DicomInstanceId,
                 studyResource.ImageSet.TotalImages, studyResource.ImageSet.ImagesReceived, studyResource.Patient.FirstName,
@@ -38,7 +36,17 @@ namespace StudyApi.Controllers
 
             _commandBus.Send(command);
             
-            return Ok();
+            return Ok(studyId.ToString() + " created");
+        }
+
+        [HttpPost, Route("api/studies/review")]
+        public IActionResult ReviewStudy([FromBody]Guid studyId)
+        {
+            var command = new ReviewStudyCommand(studyId);
+            
+            _commandBus.Send(command);
+
+            return Ok(studyId.ToString() + " reviewed");
         }
     }
 }

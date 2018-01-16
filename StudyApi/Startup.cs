@@ -70,6 +70,7 @@ namespace StudyApi
             {
                 var studyCommandHandlers = serviceProvider.GetService<StudyCommandHandlers>();
                 commandBus.RegisterHandler<CreateStudyCommand>(studyCommandHandlers.Handle);
+                commandBus.RegisterHandler<ReviewStudyCommand>(studyCommandHandlers.Handle);
             }
 
             var eventPublisher = serviceProvider.GetService<IEventPublisher>() as FakeBus;

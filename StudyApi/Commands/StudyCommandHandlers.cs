@@ -34,5 +34,15 @@ namespace StudyApi.Commands
             
             _repository.Save(study, -1);
         }
+
+        public void Handle(ReviewStudyCommand command)
+        {
+            var study = _repository.GetById(command.StudyId);
+            
+            // If not POC, would capture actual study review, not to be confused with study report review from quality peer review
+            study.CaptureReview();
+
+            _repository.Save(study, study.Version);
+        }
     }
 }
