@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Risly.Cqrs
 {
@@ -27,6 +28,11 @@ namespace Risly.Cqrs
             var e = _storage.GetEventsForAggregate(id);
             obj.LoadFromHistory(e);
             return obj;
+        }
+
+        public IEnumerable<Guid> GetAllIds()
+        {
+            return _storage.GetAllAggregateIds();
         }
     }
 }

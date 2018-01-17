@@ -69,7 +69,7 @@ namespace Risly.Cqrs
 
         // collect all processed events for given aggregate and return them as a list
         // used to build up an aggregate from its history (Domain.LoadsFromHistory)
-        public  List<Event> GetEventsForAggregate(Guid aggregateId)
+        public  IEnumerable<Event> GetEventsForAggregate(Guid aggregateId)
         {
             List<EventDescriptor> eventDescriptors;
 
@@ -79,6 +79,11 @@ namespace Risly.Cqrs
             }
 
             return eventDescriptors.Select(desc => desc.EventData).ToList<Event>();
+        }
+
+        public IEnumerable<Guid> GetAllAggregateIds()
+        {
+            return _current.Keys.ToList();
         }
     }
 

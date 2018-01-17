@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Risly.Cqrs
 {
@@ -9,5 +10,6 @@ namespace Risly.Cqrs
     {
         void Save(T aggregate, int expectedVersion);
         T GetById(Guid id);
+        IEnumerable<Guid> GetAllIds();
     }
 }

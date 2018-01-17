@@ -8,12 +8,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using AutoMapper;
 using Newtonsoft.Json;
 using Risly.Cqrs;
 using Risly.Cqrs.Kafka;
 using StudyApi.Commands;
 using StudyApi.Events;
 using StudyApi.Models;
+using StudyApi.Queries;
 
 namespace StudyApi
 {
@@ -31,9 +33,13 @@ namespace StudyApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper();
+
             // manages events and data internally
             services.AddSingleton<ICommandBus, FakeBus>();
+            services.AddSingleton<IQueryBus, FakeBus>();
             services.AddSingleton<StudyCommandHandlers>();
+            services.AddSingleton<StudyQueryHandlers>();
             services.AddSingleton<IEventStore, EventStore>();
             services.AddSingleton<IRepository<Study>, EventSourcedRepository<Study>>();
 
@@ -77,8 +83,15 @@ namespace StudyApi
             if(commandBus != null)
             {
                 var studyCommandHandlers = serviceProvider.GetService<StudyCommandHandlers>();
-                commandBus.RegisterHandler<CreateStudyCommand>(studyCommandHandlers.Handle);
-                commandBus.RegisterHandler<ReviewStudyCommand>(studyCommandHandlers.Handle);
+                commandBus.RegisterCommandHandler<CreateStudyCommand>(studyCommandHandlers.Handle);
+                commandBus.RegisterCommandHandler<ReviewStudyCommand>(studyCommandHandlers.Handle);
+            }
+
+            var queryBus = serviceProvider.GetService<ICommandBus>() as FakeBus;
+            if(queryBus != null)
+            {
+                var studyQueryHandlers = serviceProvider.GetService<StudyQueryHandlers>();
+                queryBus.RegisterQueryHandler<GetAllStudiesQuery>(studyQueryHandlers.Handle);
             }
 
             string topicName = "studies";
