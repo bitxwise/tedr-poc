@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Risly.Cqrs;
@@ -72,7 +73,7 @@ namespace StudyApi.Controllers
                 totalImages, totalImages, patientFirstName, patientLastName, patientGender, patientDateOfBirth,
                 patientMrn, referringPhysicianFirstName,referringPhysicianLastName);
 
-            _commandBus.Send(command);
+            Task.Run(() => _commandBus.Send(command));
             
             return Ok(studyId.ToString() + " created");
         }
@@ -82,7 +83,7 @@ namespace StudyApi.Controllers
         {
             var command = new ReviewStudyCommand(studyId);
             
-            _commandBus.Send(command);
+            Task.Run(() => _commandBus.Send(command));
 
             return Ok(studyId.ToString() + " reviewed");
         }
