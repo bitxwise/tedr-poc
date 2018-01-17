@@ -49,12 +49,28 @@ namespace StudyApi.Controllers
         public IActionResult CreateStudy([FromBody]StudyResource studyResource)
         {
             Guid studyId = Guid.NewGuid();
-            var command = new CreateStudyCommand(studyId, studyResource.Facility.Id, studyResource.Facility.Name,
-                studyResource.AccessionNumber, studyResource.Procedure.Id, studyResource.Procedure.Name,
-                studyResource.ProcedureDate, studyResource.Reason, studyResource.ImageSet.Id, studyResource.ImageSet.DicomInstanceId,
-                studyResource.ImageSet.TotalImages, studyResource.ImageSet.ImagesReceived, studyResource.Patient.FirstName,
-                studyResource.Patient.LastName, studyResource.Patient.Gender, studyResource.Patient.DateOfBirth, studyResource.Patient.Mrn,
-                studyResource.ReferringPhysician.FirstName, studyResource.ReferringPhysician.LastName);
+
+            // TODO: Clean up null checking to not duplicate checks
+            Guid facilityId = studyResource.Facility != null ? studyResource.Facility.Id : Guid.Empty;
+            string facilityName = studyResource.Facility != null ? studyResource.Facility.Name : string.Empty;
+            Guid procedureId = studyResource.Procedure != null ? studyResource.Procedure.Id : Guid.Empty;
+            string procedureName = studyResource.Procedure != null ? studyResource.Procedure.Name : string.Empty;
+            Guid imageSetId = studyResource.ImageSet != null ? studyResource.ImageSet.Id : Guid.Empty;
+            string dicomInstanceId = studyResource.ImageSet != null ? studyResource.ImageSet.DicomInstanceId : string.Empty;
+            int totalImages = studyResource.ImageSet != null ? studyResource.ImageSet.TotalImages : 0;
+            string patientFirstName = studyResource.Patient != null ? studyResource.Patient.FirstName : string.Empty;
+            string patientLastName = studyResource.Patient != null ? studyResource.Patient.LastName : string.Empty;
+            string patientGender = studyResource.Patient != null ? studyResource.Patient.Gender : string.Empty;
+            string patientMrn = studyResource.Patient != null ? studyResource.Patient.Mrn : string.Empty;
+            DateTime? patientDateOfBirth = studyResource.Patient != null ? studyResource.Patient.DateOfBirth : null;
+            string referringPhysicianFirstName = studyResource.ReferringPhysician != null ? studyResource.ReferringPhysician.FirstName : string.Empty;
+            string referringPhysicianLastName = studyResource.ReferringPhysician != null ? studyResource.ReferringPhysician.LastName : string.Empty;
+
+            var command = new CreateStudyCommand(studyId, facilityId, facilityName,
+                studyResource.AccessionNumber, procedureId, procedureName,
+                studyResource.ProcedureDate, studyResource.Reason, imageSetId, dicomInstanceId,
+                totalImages, totalImages, patientFirstName, patientLastName, patientGender, patientDateOfBirth,
+                patientMrn, referringPhysicianFirstName,referringPhysicianLastName);
 
             _commandBus.Send(command);
             

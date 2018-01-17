@@ -88,7 +88,7 @@ namespace StudyApi
                 commandBus.RegisterCommandHandler<ReviewStudyCommand>(studyCommandHandlers.Handle);
             }
 
-            var queryBus = serviceProvider.GetService<ICommandBus>() as FakeBus;
+            var queryBus = serviceProvider.GetService<IQueryBus>() as FakeBus;
             if(queryBus != null)
             {
                 var studyQueryHandlers = serviceProvider.GetService<StudyQueryHandlers>();
