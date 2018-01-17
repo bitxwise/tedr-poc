@@ -28,6 +28,8 @@ namespace Risly.Cqrs.Kafka
 
         public string TopicName { get; set; }
 
+        public string ConsumerGroupId { get; set; }
+
         /// <summary>
         /// Initializes a new instance of the Api.Events.KafkaUpdateConsumer class
         /// with specified  event handler and default broker list and topic name.
@@ -45,7 +47,7 @@ namespace Risly.Cqrs.Kafka
             // TODO: Load configuration from file instead of statically in code
             var config = new Dictionary<string, object>
             {
-                { "group.id", "advanced-csharp-consumer" },
+                { "group.id", ConsumerGroupId },
                 { "enable.auto.commit", false },
                 { "bootstrap.servers", BrokerList },
                 { "default.topic.config", new Dictionary<string, object>()

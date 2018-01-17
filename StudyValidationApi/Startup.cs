@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using Risly.Cqrs;
 using Risly.Cqrs.Kafka;
 using StudyValidationApi.Events;
+using StudyValidationApi.Persistence;
 
 namespace StudyValidationApi
 {
@@ -29,6 +30,8 @@ namespace StudyValidationApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IStudyRepository, StudyRepository>();
+
             // publishes events to other services
             services.AddSingleton<IEventPublisher, KafkaEventPublisher>();
             
@@ -66,11 +69,14 @@ namespace StudyValidationApi
             app.UseMvc();
 
             string topicName = "studies";
+            string consumerGroupId = "studyValidationApi";
+
             var eventPublisher = serviceProvider.GetService<IEventPublisher>() as KafkaEventPublisher;
             eventPublisher.TopicName = topicName;
             
             _studyKafkaEventConsumer = serviceProvider.GetService<KafkaEventConsumer>();
             _studyKafkaEventConsumer.TopicName = topicName;
+            _studyKafkaEventConsumer.ConsumerGroupId = consumerGroupId;
             
             _kafkaConsumerTask = Task.Run(() => _studyKafkaEventConsumer.Start());
         }

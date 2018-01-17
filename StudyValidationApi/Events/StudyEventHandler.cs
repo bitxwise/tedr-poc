@@ -15,13 +15,13 @@ namespace StudyValidationApi.Events
         private readonly Dictionary<Type, Action<Event>> _handlers;
 
         // TODO: (?)Combine these two as they are combined in StudyApi
-        private readonly StudyRepository _studyRepository;
+        private readonly IStudyRepository _studyRepository;
         private readonly IEventPublisher _eventPublisher;
 
         // TODO: Separate validation rules into its own object so that they can be managed separately
         private readonly List<IValidationRule> _validationRules;
 
-        public StudyEventHandler(StudyRepository studyRepository, IEventPublisher eventPublisher)
+        public StudyEventHandler(IStudyRepository studyRepository, IEventPublisher eventPublisher)
         {
             _handlers = new Dictionary<Type, Action<Event>>();
             _handlers.Add(typeof(StudyCreatedEvent), (e) => Handle((StudyCreatedEvent)e));
@@ -60,6 +60,8 @@ namespace StudyValidationApi.Events
         {
             var study = _studyRepository.GetById(e.StudyId);
             study.Apply(e);
+
+            _studyRepository.Save(study);
         }
 
         public void Handle(StudyReviewedEvent e)

@@ -20,6 +20,7 @@ namespace Risly.Cqrs
         public void Save(T aggregate, int expectedVersion)
         {
             _storage.SaveEvents(aggregate.Id, aggregate.GetUncommittedChanges(), expectedVersion);
+            aggregate.MarkChangesAsCommitted();
         }
 
         public T GetById(Guid id)

@@ -96,11 +96,14 @@ namespace StudyApi
             }
 
             string topicName = "studies";
+            string consumerGroupId = "studyApi";
+
             var eventPublisher = serviceProvider.GetService<IEventPublisher>() as KafkaEventPublisher;
             eventPublisher.TopicName = topicName;
             
             _studyKafkaEventConsumer = serviceProvider.GetService<KafkaEventConsumer>();
             _studyKafkaEventConsumer.TopicName = topicName;
+            _studyKafkaEventConsumer.ConsumerGroupId = consumerGroupId;
 
             _kafkaConsumerTask = Task.Run(() => _studyKafkaEventConsumer.Start());
         }
