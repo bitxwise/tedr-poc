@@ -22,6 +22,7 @@ namespace StudyApi
     public class Startup
     {
         private KafkaEventConsumer _studyKafkaEventConsumer;
+        private Task _kafkaConsumerTask;
 
         public Startup(IConfiguration configuration)
         {
@@ -100,13 +101,16 @@ namespace StudyApi
             
             _studyKafkaEventConsumer = serviceProvider.GetService<KafkaEventConsumer>();
             _studyKafkaEventConsumer.TopicName = topicName;
-            _studyKafkaEventConsumer.Start();
+
+            _kafkaConsumerTask = Task.Run(() => _studyKafkaEventConsumer.Start());
         }
 
         private void OnShutdown()
         {
             if(!_studyKafkaEventConsumer.IsStopping)
                 _studyKafkaEventConsumer.Stop();
+            
+            _kafkaConsumerTask.Wait(10000);
         }
     }
 }
