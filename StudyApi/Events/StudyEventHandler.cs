@@ -38,7 +38,7 @@ namespace StudyApi.Events
             var study = _studyRepository.GetById(e.StudyId);
             study.Apply(e);
 
-            _studyRepository.Save(study, study.Version);
+            _studyRepository.Save(study, study.Version - 1);
         }
 
         public void Handle(BadStudyAccessionEvent e)
@@ -46,7 +46,7 @@ namespace StudyApi.Events
             var study = _studyRepository.GetById(e.StudyId);
             study.Apply(e);
 
-            _studyRepository.Save(study, study.Version);
+            _studyRepository.Save(study, study.Version - 1);
         }
     }
 }

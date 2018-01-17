@@ -42,7 +42,7 @@ namespace StudyApi.Commands
             // If not POC, would capture actual study review, not to be confused with study report review from quality peer review
             study.CaptureReview();
 
-            _repository.Save(study, study.Version);
+            _repository.Save(study, study.Version - 1);
         }
     }
 }

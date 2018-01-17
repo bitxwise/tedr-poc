@@ -82,15 +82,16 @@ namespace StudyApi.Models
             string referringPhysicianFirstName, string referringPhysicianLastName)
         {
             ApplyChange(new StudyCreatedEvent(studyId));
-            ApplyChange(new FacilityChangedEvent(studyId, facilityId, facilityName));
-            ApplyChange(new AccessionNumberChangedEvent(studyId, accessionNumber));
-            ApplyChange(new ProcedureChangedEvent(studyId, procedureId, procedureName));
-            ApplyChange(new ReasonChangedEvent(studyId, reason));
-            ApplyChange(new ImageSetChangedEvent(studyId, imageSetId, dicomInstanceId));
-            ApplyChange(new ImagesReceivedEvent(studyId, imagesReceived));
-            ApplyChange(new ImageTotalChangedEvent(studyId, totalImages));
-            ApplyChange(new PatientChangedEvent(studyId, patientMrn, patientFirstName, patientLastName, patientGender, patientDateOfBirth));
-            ApplyChange(new ReferringPhysicianChangedEvent(studyId, referringPhysicianFirstName, referringPhysicianLastName));
+            
+            if(facilityId != Guid.Empty) ApplyChange(new FacilityChangedEvent(studyId, facilityId, facilityName));
+            if(!string.IsNullOrWhiteSpace(accessionNumber)) ApplyChange(new AccessionNumberChangedEvent(studyId, accessionNumber));
+            if(procedureId != Guid.Empty) ApplyChange(new ProcedureChangedEvent(studyId, procedureId, procedureName));
+            if(!string.IsNullOrWhiteSpace(reason)) ApplyChange(new ReasonChangedEvent(studyId, reason));
+            if(imageSetId != Guid.Empty) ApplyChange(new ImageSetChangedEvent(studyId, imageSetId, dicomInstanceId));
+            if(imagesReceived > 0) ApplyChange(new ImagesReceivedEvent(studyId, imagesReceived));
+            if(totalImages > 0) ApplyChange(new ImageTotalChangedEvent(studyId, totalImages));
+            if(!string.IsNullOrWhiteSpace(patientMrn)) ApplyChange(new PatientChangedEvent(studyId, patientMrn, patientFirstName, patientLastName, patientGender, patientDateOfBirth));
+            if(!string.IsNullOrWhiteSpace(referringPhysicianLastName)) ApplyChange(new ReferringPhysicianChangedEvent(studyId, referringPhysicianFirstName, referringPhysicianLastName));
         }
 
         #region Event Applications
