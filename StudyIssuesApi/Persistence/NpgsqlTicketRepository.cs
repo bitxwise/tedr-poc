@@ -1,19 +1,19 @@
+using System;
 using StudyIssuesApi.Models;
 
 namespace StudyIssuesApi.Persistence
 {
     public class NpgsqlTicketRepository : ITicketRepository
     {
-        private readonly TicketDbContext _context;
-
-        public NpgsqlTicketRepository(TicketDbContext context)
-        {
-            _context = context;
-        }
+        public Func<TicketDbContext> getDbContext { get; set; }
 
         public void AddTicket(Ticket ticket)
         {
-            _context.Add(ticket);
+            using(TicketDbContext context = getDbContext())
+            {
+                context.Add(ticket);
+                context.SaveChanges();
+            }
         }
     }
 }

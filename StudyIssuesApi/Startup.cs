@@ -31,11 +31,11 @@ namespace StudyIssuesApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TicketDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Default")));
-            services.AddSingleton<ITicketRepository, LocalTicketRepository>();
+            services.AddScoped<ITicketRepository, NpgsqlTicketRepository>();
 
             // handles events published by other services
-            services.AddSingleton<IEventHandler, StudyEventHandler>();
-            services.AddSingleton<KafkaEventConsumer>();
+            services.AddScoped<IEventHandler, StudyEventHandler>();
+            services.AddTransient<KafkaEventConsumer>();
 
             services.AddMvc();
         }
@@ -72,6 +72,9 @@ namespace StudyIssuesApi
             _studyKafkaEventConsumer = serviceProvider.GetService<KafkaEventConsumer>();
             _studyKafkaEventConsumer.TopicName = topicName;
             _studyKafkaEventConsumer.ConsumerGroupId = consumerGroupId;
+            
+            var npqsqlTicketRepository = serviceProvider.GetService<ITicketRepository>() as NpgsqlTicketRepository;
+            npqsqlTicketRepository.getDbContext = serviceProvider.GetService<TicketDbContext>;
 
             _kafkaConsumerTask = Task.Run(() => _studyKafkaEventConsumer.Start());
         }
