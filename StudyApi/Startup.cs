@@ -96,7 +96,7 @@ namespace StudyApi
             }
 
             string topicName = "studies";
-            string consumerGroupId = "studyApi";
+            string consumerGroupId = Guid.NewGuid().ToString(); // "studyApi";
 
             var eventPublisher = serviceProvider.GetService<IEventPublisher>() as KafkaEventPublisher;
             eventPublisher.TopicName = topicName;

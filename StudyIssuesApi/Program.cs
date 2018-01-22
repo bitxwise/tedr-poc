@@ -20,7 +20,7 @@ namespace StudyIssuesApi
         public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                .UseUrls("http://*:5002")
+                .UseUrls("http://*:5002, http://*:5004")
                 .Build();
     }
 }
