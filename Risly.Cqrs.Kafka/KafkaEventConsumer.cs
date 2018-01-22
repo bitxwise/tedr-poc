@@ -81,6 +81,8 @@ namespace Risly.Cqrs.Kafka
 
                         _EventHandler.Handle(message.Value);
 
+                        Console.WriteLine($"INFO: Consumed Partition: {message.Partition}, Offset: {message.Offset}");
+
                         var committedOffsets = consumer.CommitAsync(message).Result;
                     }
                     catch(Exception ex)
